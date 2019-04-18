@@ -11,17 +11,18 @@
 #define MULTIMEDIA_FINAL_PROJECT_PHOTOSHOPC_H
 
 using namespace cv;
+using namespace std;
 
 class Photoshopc {
     Mat image;
 public:
-    Photoshopc();
+    Photoshopc(String*);
+    Photoshopc(int, int);
     Mat dilatation(int);
     Mat erosion(int);
-    Mat resize();
-    Mat luminosity();
-    Mat panorama();
-    Mat stitching();
+    Mat resize(double, double);
+    Mat luminosity(int);
+    Mat panorama(vector<Mat>*);
     Mat cannyEdgeDetection(double, double, int);
 
 };
