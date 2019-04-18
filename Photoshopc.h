@@ -15,7 +15,7 @@ public:
     Photoshopc(int, int);
     Mat morphologicalOperators();
     Mat erosion();
-    Mat resize();
+    Mat resize(double, double);
     Mat luminosity(int);
     Mat panorama(vector<Mat>*);
     Mat cannyEdgeDetection();
