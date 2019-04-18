@@ -6,11 +6,13 @@
 #define MULTIMEDIA_FINAL_PROJECT_PHOTOSHOPC_H
 
 using namespace cv;
+using namespace std;
 
 class Photoshopc {
     Mat image;
 public:
-    Photoshopc();
+    Photoshopc(String* path);
+    Photoshopc(int x, int y);
     Mat morphologicalOperators();
     Mat erosion();
     Mat resize();
