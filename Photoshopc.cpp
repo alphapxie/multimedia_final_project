@@ -11,3 +11,9 @@ Photoshopc::Photoshopc(String* path) {
 Photoshopc::Photoshopc(int x, int y) {
     this->image = Mat::zeros(cv::Size(x, y), CV_64FC1);
 }
+
+Mat Photoshopc::luminosity(int luminosity) {
+    Mat newImage;
+    image.convertTo(newImage, -1, 1, luminosity);
+    return newImage;
+}

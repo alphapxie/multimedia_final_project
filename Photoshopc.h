@@ -16,7 +16,7 @@ public:
     Mat morphologicalOperators();
     Mat erosion();
     Mat resize();
-    Mat luminosity();
+    Mat luminosity(int luminosity);
     Mat panorama();
     Mat stitching();
     Mat cannyEdgeDetection();
