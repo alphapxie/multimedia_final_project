@@ -11,14 +11,13 @@ using namespace std;
 class Photoshopc {
     Mat image;
 public:
-    Photoshopc(String* path);
-    Photoshopc(int x, int y);
+    Photoshopc(String*);
+    Photoshopc(int, int);
     Mat morphologicalOperators();
     Mat erosion();
     Mat resize();
-    Mat luminosity(int luminosity);
-    Mat panorama();
-    Mat stitching();
+    Mat luminosity(int);
+    Mat panorama(vector<Mat>*);
     Mat cannyEdgeDetection();
 
 };
