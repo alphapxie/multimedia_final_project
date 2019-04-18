@@ -4,7 +4,6 @@
 
 #include "Photoshopc.h"
 
-
 Photoshopc::Photoshopc(String* path) {
     this->image = imread(*path);
 }
@@ -18,6 +17,15 @@ Mat Photoshopc::luminosity(int luminosity) {
     image.convertTo(newImage, -1, 1, luminosity);
     return newImage;
 }
+
+Mat Photoshopc::resize(double a, double b)
+{
+	Mat dst;
+	resize(image, dst, Size((int) round(a*image.cols),(int) round(b*image.rows)),INTER_LINEAR);
+	return dst;
+}
+
+
 
 Mat Photoshopc::panorama(vector<Mat>* images) {
     Stitcher::Mode mode = Stitcher::PANORAMA;
