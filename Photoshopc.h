@@ -18,6 +18,7 @@ class Photoshopc {
 public:
     Photoshopc(String*);
     Photoshopc(int, int);
+    Photoshopc(Mat);
     Mat dilatation(int);
     Mat erosion(int);
     Mat resize(double, double);
