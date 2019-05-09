@@ -45,7 +45,7 @@ Mat Photoshopc::luminosity(int luminosity) {
 Mat Photoshopc::resize(double a, double b)
 {
 	Mat dst;
-	resize(image, dst, Size((int) round(a*image.cols),(int) round(b*image.rows)),INTER_LINEAR);
+	cv::resize(image, dst, Size((int) round(a*image.cols),(int) round(b*image.rows)),INTER_LINEAR);
 	return dst;
 }
 
