@@ -24,6 +24,10 @@ Mat Photoshopc::erosion(int iteration){
     erode(this->image, dest, 0, Point (-1,1), iteration, BORDER_REFLECT101, morphologyDefaultBorderValue());
 }
 
+Photoshopc::Photoshopc(Mat image) {
+    this->image = image;
+}
+
 Mat Photoshopc::cannyEdgeDetection(double thresh1=100, double thresh2=200, int apertureSize=3){
     Mat dest;
     Canny(this->image, dest, thresh1, thresh2, apertureSize, false);
