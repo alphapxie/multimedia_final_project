@@ -12,16 +12,24 @@ using namespace cv;
 using namespace std;
 
 
+Photoshopc::Photoshopc(String* path) {
+    this->image = imread(*path);
+}
 
+Photoshopc::Photoshopc(int x, int y) {
+    this->image = Mat::zeros(cv::Size(x, y), CV_64FC1);
+}
 
 Mat Photoshopc::dilatation(int iteration){
     Mat dest;
     dilate(this->image, dest, 0, Point (-1,1), iteration, BORDER_REFLECT101, morphologyDefaultBorderValue());
+    return dest;
 }
 
 Mat Photoshopc::erosion(int iteration){
     Mat dest;
     erode(this->image, dest, 0, Point (-1,1), iteration, BORDER_REFLECT101, morphologyDefaultBorderValue());
+    return dest;
 }
 
 Photoshopc::Photoshopc(Mat image) {
@@ -31,13 +39,7 @@ Photoshopc::Photoshopc(Mat image) {
 Mat Photoshopc::cannyEdgeDetection(double thresh1=100, double thresh2=200, int apertureSize=3){
     Mat dest;
     Canny(this->image, dest, thresh1, thresh2, apertureSize, false);
-}
-Photoshopc::Photoshopc(String* path) {
-    this->image = imread(*path);
-}
-
-Photoshopc::Photoshopc(int x, int y) {
-    this->image = Mat::zeros(cv::Size(x, y), CV_64FC1);
+    return dest;
 }
 
 Mat Photoshopc::luminosity(int luminosity) {
