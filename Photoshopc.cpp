@@ -14,54 +14,75 @@ using namespace std;
 
 Photoshopc::Photoshopc(String* path) {
     this->image = imread(*path);
+    this->newImage = imread(*path);
+    this->src = imread(*path);
 }
 
 Photoshopc::Photoshopc(int x, int y) {
     this->image = Mat::zeros(cv::Size(x, y), CV_64FC1);
+    this->newImage = Mat::zeros(cv::Size(x, y), CV_64FC1);
+    this->src = Mat::zeros(cv::Size(x, y), CV_64FC1);
 }
 
-Mat Photoshopc::dilatation(int iteration){
+Photoshopc::Photoshopc(Mat img) {
+    img.copyTo(image);
+    img.copyTo(newImage);
+    img.copyTo(src);
+}
+void Photoshopc::dilatation(int iteration){
+    dilate(image, newImage, Mat(), Point (-1, -1), iteration);
+}
+
+void Photoshopc::erosion(int iteration){
+    erode(image, newImage, Mat(), Point (-1, -1), iteration);
+}
+
+void Photoshopc::cannyEdgeDetection(double thresh1=100, double thresh2=200, int apertureSize=3){
     Mat dest;
-    dilate(this->image, dest, 0, Point (-1,1), iteration, BORDER_REFLECT101, morphologyDefaultBorderValue());
-    return dest;
+    if(apertureSize%2 == 0){
+        cout << "aperture size should be odd between 3 and 7" << endl;
+        return;
+    }
+    Canny(this->image, newImage, thresh1, thresh2, apertureSize, false);
 }
 
-Mat Photoshopc::erosion(int iteration){
-    Mat dest;
-    erode(this->image, dest, 0, Point (-1,1), iteration, BORDER_REFLECT101, morphologyDefaultBorderValue());
-    return dest;
-}
-
-Mat Photoshopc::cannyEdgeDetection(double thresh1=100, double thresh2=200, int apertureSize=3){
-    Mat dest;
-    Canny(this->image, dest, thresh1, thresh2, apertureSize, false);
-    return dest;
-}
-
-Mat Photoshopc::luminosity(int luminosity) {
-    Mat newImage;
+void Photoshopc::luminosity(int luminosity) {
     image.convertTo(newImage, -1, 1, luminosity);
-    return newImage;
 }
 
-Mat Photoshopc::resize(double a, double b)
+void Photoshopc::resize(double a, double b)
 {
 	Mat dst;
-	cv::resize(image, dst, Size((int) round(a*image.cols),(int) round(b*image.rows)),INTER_LINEAR);
-	return dst;
+	int width = MIN(MAX(round(a*image.cols/100), 1), 1080);
+	int height = MIN(MAX(round(b*image.rows/100), 1), 720);
+	cv::resize(image, newImage, Size(width, height),INTER_LINEAR);
 }
 
 
 
-Mat Photoshopc::panorama(vector<Mat>* images) {
+void Photoshopc::panorama(vector<Mat>* images) {
     Stitcher::Mode mode = Stitcher::PANORAMA;
-    Mat pano;
     Ptr<Stitcher> stitcher = Stitcher::create(mode);
-    Stitcher::Status status = stitcher->stitch(*images, pano);
+    Stitcher::Status status = stitcher->stitch(*images, newImage);
     if (status != Stitcher::OK)
     {
         cout << "Can't stitch images\n";
-        return images->at(0);
+        newImage =  images->at(0);
     }
-    return pano;
+}
+
+Mat* Photoshopc::getImage() {
+    return &this->image;
+}
+Mat* Photoshopc::getNewImage() {
+    return &this->newImage;
+}
+
+void Photoshopc::save() {
+    newImage.copyTo(image);
+}
+
+void Photoshopc::reset() {
+    src.copyTo(image);
+    src.copyTo(newImage);
 }

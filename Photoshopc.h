@@ -14,17 +14,23 @@ using namespace cv;
 using namespace std;
 
 class Photoshopc {
+    Mat src;
     Mat image;
+    Mat newImage;
 public:
     Photoshopc(String*);
     Photoshopc(int, int);
     Photoshopc(Mat);
-    Mat dilatation(int);
-    Mat erosion(int);
-    Mat resize(double, double);
-    Mat luminosity(int);
-    Mat panorama(vector<Mat>*);
-    Mat cannyEdgeDetection(double, double, int);
+    void dilatation(int);
+    void erosion(int);
+    void resize(double, double);
+    void luminosity(int);
+    void panorama(vector<Mat>*);
+    void cannyEdgeDetection(double, double, int);
+    Mat* getImage();
+    Mat* getNewImage();
+    void save();
+    void reset();
 
 };
 
