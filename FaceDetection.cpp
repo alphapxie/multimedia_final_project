@@ -34,8 +34,7 @@ FaceDetection::FaceDetection() {
         while( true )
         {
             capture>> frame;
-//            resize(frame, frame, Size((int) round(0.5*frame.cols),(int) round(0.5*frame.rows)),INTER_LINEAR);
-            //-- 3. Apply the classifier to the frame
+
             if( !frame.empty() )
             { detectAndDisplay( frame ); }
             else
