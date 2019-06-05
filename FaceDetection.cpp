@@ -20,17 +20,14 @@ CascadeClassifier eyes_cascade;
 string window_name = "Capture - Face detection";
 RNG rng(12345);
 
-/** @function main */
+
 
 FaceDetection::FaceDetection() {
     VideoCapture capture;
     Mat frame;
 
-    //-- 1. Load the cascades
     if( !face_cascade.load( face_cascade_name ) ){ printf("--(!)Error loading\n"); };
     if( !eyes_cascade.load( eyes_cascade_name ) ){ printf("--(!)Error loading\n"); };
-
-    //-- 2. Read the video stream
     capture = VideoCapture( 0 );
     if( capture.isOpened() )
     {
@@ -50,7 +47,7 @@ FaceDetection::FaceDetection() {
     }
 }
 
-/** @function detectAndDisplay */
+
 void FaceDetection::detectAndDisplay( Mat frame )
 {
     std::vector<Rect> faces;
@@ -59,7 +56,6 @@ void FaceDetection::detectAndDisplay( Mat frame )
     cvtColor( frame, frame_gray, COLOR_BGR2GRAY );
     equalizeHist( frame_gray, frame_gray );
 
-    //-- Detect faces
     face_cascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
 
     for( size_t i = 0; i < faces.size(); i++ )
@@ -70,7 +66,6 @@ void FaceDetection::detectAndDisplay( Mat frame )
         Mat faceROI = frame_gray( faces[i] );
         std::vector<Rect> eyes;
 
-        //-- In each face, detect eyes
         eyes_cascade.detectMultiScale( faceROI, eyes, 1.1, 2, 0 |CASCADE_SCALE_IMAGE, Size(30, 30) );
 
         for( size_t j = 0; j < eyes.size(); j++ )
@@ -80,6 +75,5 @@ void FaceDetection::detectAndDisplay( Mat frame )
             circle( frame, center, radius, Scalar( 255, 0, 0 ), 4, 8, 0 );
         }
     }
-    //-- Show what you got
     imshow( window_name, frame );
 }
