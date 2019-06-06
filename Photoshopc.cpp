@@ -12,10 +12,10 @@ using namespace cv;
 using namespace std;
 
 
-Photoshopc::Photoshopc(String* path) {
-    this->image = imread(*path);
-    this->newImage = imread(*path);
-    this->src = imread(*path);
+Photoshopc::Photoshopc(String path) {
+    this->image = imread(path);
+    this->newImage = imread(path);
+    this->src = imread(path);
 }
 
 Photoshopc::Photoshopc(int x, int y) {
@@ -29,6 +29,17 @@ Photoshopc::Photoshopc(Mat img) {
     img.copyTo(newImage);
     img.copyTo(src);
 }
+
+Photoshopc::Photoshopc(vector<string> fileList) {
+    vector<Mat> matList;
+    for (string file : fileList) {
+        matList.push_back(cv::imread(file));
+    }
+    Mat fullPicture = panorama(&matList);
+    fullPicture.copyTo(src);
+    src.copyTo(image);
+    src.copyTo(newImage);
+}
 void Photoshopc::dilatation(int iteration){
     dilate(image, newImage, Mat(), Point (-1, -1), iteration);
 }
@@ -39,8 +50,8 @@ void Photoshopc::erosion(int iteration){
 
 void Photoshopc::cannyEdgeDetection(double thresh1=100, double thresh2=200, int apertureSize=3){
     Mat dest;
-    if(apertureSize%2 == 0){
-        cout << "aperture size should be odd between 3 and 7" << endl;
+    if(apertureSize%2 == 0 || apertureSize < 3 || apertureSize > 7){
+        cout << "Aperture size should be odd between 3 and 7" << endl;
         return;
     }
     Canny(this->image, newImage, thresh1, thresh2, apertureSize, false);
@@ -60,15 +71,21 @@ void Photoshopc::resize(double a, double b)
 
 
 
-void Photoshopc::panorama(vector<Mat>* images) {
+Mat Photoshopc::panorama(vector<Mat>* images) {
+    Mat fullImage;
     Stitcher::Mode mode = Stitcher::PANORAMA;
     Ptr<Stitcher> stitcher = Stitcher::create(mode);
-    Stitcher::Status status = stitcher->stitch(*images, newImage);
+    Stitcher::Status status = stitcher->stitch(*images, fullImage);
     if (status != Stitcher::OK)
     {
         cout << "Can't stitch images\n";
-        newImage =  images->at(0);
+        return images->at(0);
     }
+    return fullImage;
+}
+
+void Photoshopc::setImage(Mat picture) {
+    picture.copyTo(image);
 }
 
 Mat* Photoshopc::getImage() {

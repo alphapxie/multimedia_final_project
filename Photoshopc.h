@@ -1,15 +1,15 @@
 //
 // Created by victo on 18/04/2019.
 //
-#include <opencv2/opencv.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
+
 #include <iostream>
 
 #ifndef MULTIMEDIA_FINAL_PROJECT_PHOTOSHOPC_H
 #define MULTIMEDIA_FINAL_PROJECT_PHOTOSHOPC_H
-
+#include <opencv2/opencv.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
 using namespace cv;
 using namespace std;
 
@@ -18,16 +18,18 @@ class Photoshopc {
     Mat image;
     Mat newImage;
 public:
-    Photoshopc(String*);
+    Photoshopc(String);
     Photoshopc(int, int);
     Photoshopc(Mat);
+    Photoshopc(vector<string> fileList);
     void dilatation(int);
     void erosion(int);
     void resize(double, double);
     void luminosity(int);
-    void panorama(vector<Mat>*);
+    static Mat panorama(vector<Mat>*);
     void cannyEdgeDetection(double, double, int);
     Mat* getImage();
+    void setImage(Mat);
     Mat* getNewImage();
     void save();
     void reset();
